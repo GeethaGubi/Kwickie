@@ -29,6 +29,9 @@ public class PullVideoDataImpl implements PullVideoData {
     ArrayList<KwickieData> kwickieDataList = null;
     Context context;
     private final String TAG = "PullVideoDataImpl";
+    int downloadCount = 0;
+    int totalThumbnails = 0;
+
 
     public PullVideoDataImpl(Context context) {
         this.context = context;
@@ -58,11 +61,15 @@ public class PullVideoDataImpl implements PullVideoData {
 
                     kwickieDataList = new ArrayList<KwickieData>();
 
+                    downloadCount = 0;
+
                     kwickieDataArray.enqueue(new Callback<KwickieData[]>() {
                                                  @Override
                                                  public void onResponse(Call<KwickieData[]> call, Response<KwickieData[]> response) {
                                                      KwickieData[] kwickieDatas = response.body();
                                                      for(final KwickieData kwickieData : kwickieDatas) {
+
+                                                         totalThumbnails = kwickieDatas.length;
 
                                                          final String thumbUrl = kwickieData.getKwickieVideo().getThumbUrl();
                                                          kwickieDataList.add(kwickieData);
@@ -75,6 +82,11 @@ public class PullVideoDataImpl implements PullVideoData {
                                                                                  File file = new File(path, kwickieData.getKwickieVideo().getId().toString()+thumbUrl.substring(thumbUrl.length()-4,thumbUrl.length()));
                                                                                  FileOutputStream fileOutputStream = new FileOutputStream(file);
                                                                                  IOUtils.write(response.body().bytes(), fileOutputStream);
+                                                                                 downloadCount = downloadCount + 1;
+
+                                                                                 if(downloadCount == totalThumbnails) {
+                                                                                     onCompleteListener.onComplete(kwickieDataList);
+                                                                                 }
                                                                              } catch (Exception e) {
                                                                                 Log.e(TAG,"Vide data fetch error");
                                                                              }
@@ -88,7 +100,8 @@ public class PullVideoDataImpl implements PullVideoData {
                                                          }
 
                                                      }
-                                                     onCompleteListener.onComplete(kwickieDataList);
+
+
                                                  }
 
                                                  @Override
