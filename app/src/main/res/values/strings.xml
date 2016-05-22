@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">kwickie</string>
+    <string name="action_settings">Settings</string>
+    <string name="playvideo"><u>Play Video</u></string>
+    <string name="quser"><b>Question User</b></string>
+    <string name="auser"><b>Answer User</b></string>
+    <string name="kwickie"><b>Kwickie</b></string>
+    <string name="kwickiedataload"><b>Kwickie Data is Loading</b></string>
+</resources>
