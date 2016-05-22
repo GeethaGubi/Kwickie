@@ -34,14 +34,8 @@ public class MainPresenterImpl implements MainPresenter, PullVideoData.OnComplet
 
     @Override
     public void onComplete(final List<KwickieData> items) {
-        //5 seconds delay is for the image (thumbnails) to be downloaded fully
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mainView.hideProgress();
-                mainView.setItems(items);
-            }
-        }, 5000);
+        mainView.hideProgress();
+        mainView.setItems(items);
 
     }
 
